@@ -22,3 +22,28 @@ app.get('/api/hello', function(req, res) {
 app.listen(port, function() {
   console.log(`Listening on port ${port}`);
 });
+
+const originalUrls = []
+const shortUrls = []
+
+
+app.post('/api/shorturl', (req, res) => {
+  const url = req.body.url
+  const foundIndex = originals.indexOf(url)
+  if (!url.includes("https://") || !url.includes("http://")) {
+    return res.json({ error: "invalid url" })
+  }
+
+  if (foundIndex < 0) {
+    originalUrls.push(url)
+    shortUrls.push(shortUrls.length)
+    return res.json({
+      original_url: url,
+      short_url: shortUrls.length - 1
+    })
+  }
+  return res.json({
+    original_url: url,
+    short_url: shortUrls[foundIndex]
+  })
+})
